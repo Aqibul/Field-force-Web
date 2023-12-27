@@ -1,41 +1,38 @@
-import "./App.css";
-import SignUp from "./Component/SignUp";
-import Home from "./Component/Sales/Home";
-import { Route, BrowserRouter, Routes } from "react-router-dom"; // Remove 'Router' import
-import Profile from "./Component/Sales/Profile";
-import Pjb from "./Component/Sales/Pjb";
-import Architect from "./Component/Sales/Clients/Architect";
-import AdminHome from "./Component/Admin/Screens/AdminHome";
-import AddCategory from "./Component/Admin/Screens/Category/AddCategory";
-import AddRoles from "./Component/Admin/Screens/Role/AddRoles";
-import AddDealer from "./Component/Admin/Screens/Dealer/AddDealer";
-import SubDealer from "./Component/Admin/Screens/Dealer/SubDealer";
-import Products from "./screens/Products";
+import { useState } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { ColorModeContext, useMode } from "./theme";
+import Topbar from "./scenes/global/Topbar";
+import Dashboard from "./scenes/dashboard";
+import Sidebar from "./scenes/global/Sidebar";
+import Login from "./scenes/Login/login";
 import { Provider } from "react-redux";
-import { store } from "./Redux/store";
-
+import store from "./Redux/store";
 function App() {
+  const [theme, colorMode] = useMode();
+  const [isSidebar, setIsSidebar] = useState(true);
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
+
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          {/* Admin Routes */}
-          <Route path="admin">
-            <Route path="home" element={<AdminHome />} />
-            <Route path="addcategory" element={<AddCategory />} />
-            <Route path="add-roles" element={<AddRoles />} />
-            <Route path="add-dealer" element={<AddDealer />} />
-            <Route path="sub-dealer" element={<SubDealer />} />
-          </Route>
-
-          <Route path="/" element={<Home />} />
-          <Route path="login" element={<SignUp />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="pjb" element={<Pjb />} />
-          <Route path="architect" element={<Architect />} />
-          <Route path="products" element={<Products />} />
-        </Routes>
-      </BrowserRouter>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <div className="app">
+            {isSidebar && !isLoginPage && <Sidebar />}
+            <main className="content">
+              {isSidebar && !isLoginPage && (
+                <Topbar setIsSidebar={setIsSidebar} />
+              )}
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<Dashboard />} />
+              </Routes>
+            </main>
+          </div>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
     </Provider>
   );
 }
