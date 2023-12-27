@@ -1,39 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const getStoredToken = () => {
-      const storedToken = localStorage.getItem("token");
-      console.log("Token from localStorage (on mount):", storedToken);
-    };
-
-    getStoredToken();
-  }, []);
-
   return (
     <div style={containerStyle}>
       <h1 style={{ color: "#fff" }}>Login</h1>
       <form style={formStyle}>
-        <input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={inputStyle}
-        />
+        <input type="text" placeholder="Email" style={inputStyle} />
 
         <button type="button" style={buttonStyle}>
           Get OTP
         </button>
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       </form>
     </div>
   );
