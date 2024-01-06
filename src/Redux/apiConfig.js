@@ -1,1 +1,1 @@
-export const apiUrl = "https://hrms.testingruminate.co.in/public";
+export const apiUrl = "https://fieldforec.testingruminate.co.in/public/api";

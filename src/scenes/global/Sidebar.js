@@ -127,7 +127,7 @@ const Sidebar = () => {
             />
             <Item
               title="PJP"
-              to="/"
+              to="/viewpjp"
               icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -149,31 +149,31 @@ const Sidebar = () => {
             <SubMenu title="Clients" icon={<PeopleOutlinedIcon />}>
               <SubMenuItem
                 title="Architect"
-                to="/employeelists"
+                to="/architect"
                 selected={selected}
                 setSelected={setSelected}
               />
               <SubMenuItem
                 title="Builder"
-                to="/"
+                to="/builder"
                 selected={selected}
                 setSelected={setSelected}
               />
               <SubMenuItem
                 title="Contractor"
-                to="/user"
+                to="/contractor"
                 selected={selected}
                 setSelected={setSelected}
               />
               <SubMenuItem
-                title="Compitator"
-                to="/user"
+                title="Competitor"
+                to="/competitor"
                 selected={selected}
                 setSelected={setSelected}
               />
               <SubMenuItem
-                title="other"
-                to="/user"
+                title="Other"
+                to="/others"
                 selected={selected}
                 setSelected={setSelected}
               />
