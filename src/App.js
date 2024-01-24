@@ -25,12 +25,17 @@ function App() {
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <div className="app">
+          <div className="app" style={{ display: "flex", height: "100%" }}>
             {isSidebar && !isLoginPage && <Sidebar />}
-            <main className="content">
-              {/* {isSidebar && !isLoginPage && (
-                <Topbar setIsSidebar={setIsSidebar} />
-              )} */}
+            <div
+              className="content"
+              style={{
+                flex: 1,
+                overflowY: "auto",
+                marginLeft: isSidebar && !isLoginPage ? "270px" : "0", // Adjust the sidebar width as needed
+                transition: "margin 0.2s ease", // Optional: add a transition effect
+              }}
+            >
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/" element={<Dashboard />} />
@@ -41,7 +46,7 @@ function App() {
                 <Route path="/competitor" element={<Competitor />} />
                 <Route path="/others" element={<Others />} />
               </Routes>
-            </main>
+            </div>
           </div>
         </ThemeProvider>
       </ColorModeContext.Provider>
