@@ -17,8 +17,6 @@ import AccessibilityNewOutlinedIcon from "@mui/icons-material/AccessibilityNewOu
 import BoyOutlinedIcon from "@mui/icons-material/BoyOutlined";
 import TransferWithinAStationOutlinedIcon from "@mui/icons-material/TransferWithinAStationOutlined";
 
-import { Apartment } from "@mui/icons-material";
-
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -65,9 +63,15 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
+        position: "fixed",
+        height: "100%",
+        overflowY: "auto",
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
+          height: "100%",
+          overflowY: "auto",
         },
+
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",
         },
@@ -83,7 +87,13 @@ const Sidebar = () => {
       }}
     >
       <ProSidebar collapsed={isCollapsed}>
-        <Menu iconShape="square">
+        <Menu
+          iconShape="square"
+          style={{
+            background: "linear-gradient(to right, #2d0031, #4d0054)",
+            height: "100%",
+          }}
+        >
           {/* LOGO AND MENU ICON */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
@@ -185,14 +195,6 @@ const Sidebar = () => {
               <SubMenuItem
                 title="Assign Role"
                 to="/assign_role"
-                selected={selected}
-                setSelected={setSelected}
-              />
-            </SubMenu>
-            <SubMenu title="Orgainzation" icon={<Apartment />}>
-              <SubMenuItem
-                title="Company"
-                to="/company"
                 selected={selected}
                 setSelected={setSelected}
               />
