@@ -10,11 +10,14 @@ export const fetchViewCategory = createAsyncThunk(
   async () => {
     const token = getTokenFromLocalStorage();
 
-    const res = await fetch(`${apiUrl}/sales/category`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(
+      `${apiUrl}/sales/dealer/dealers/${selectedCategory}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     const final = await res.json();
     return final;

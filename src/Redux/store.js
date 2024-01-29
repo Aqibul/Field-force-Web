@@ -4,6 +4,8 @@ import authMiddleware from "./authMiddleware";
 import ViewPjpSlice from "./Slice/Pjp/ViewPjpSlice";
 import ViewCategorySlice from "./Slice/Category/ViewCategorySlice";
 import ViewAllDealerSlice from "./Slice/AllDealer/ViewAllDealerSlice";
+import ViewProfileSlice from "./Slice/Profile/ViewProfileSlice";
+import ViewDashboardSlice from "./Slice/Dashboard/ViewDashboardSlice";
 
 const getInitialToken = () => {
   const initialToken = localStorage.getItem("token") || null;
@@ -20,6 +22,8 @@ try {
       ViewPjp: ViewPjpSlice,
       ViewCategory: ViewCategorySlice,
       ViewAllDealer: ViewAllDealerSlice,
+      ViewProfile: ViewProfileSlice,
+      ViewDashboard: ViewDashboardSlice,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(authMiddleware),

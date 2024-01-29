@@ -1,20 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiUrl } from "../../apiConfig";
 
-// const getTokenFromLocalStorage = () => {
-//   return localStorage.getItem("token");
-// };
+const getTokenFromLocalStorage = () => {
+  return localStorage.getItem("token");
+};
 
 export const fetchViewAllDealer = createAsyncThunk(
   "ViewAllDealer/fetchViewAllDealer",
   async () => {
-    // const token = getTokenFromLocalStorage();s
+    const token = getTokenFromLocalStorage();
 
     const res = await fetch(`${apiUrl}/sales/dealer`, {
       headers: {
-        // Authorization: `Bearer ${token}`,
-        Authorization:
-          "Bearer 32|LKWlxpo961loITF1XPqH6wqpBGEiBOz2xMDl0SrEdede90e9",
+        Authorization: `Bearer ${token}`,
       },
     });
 

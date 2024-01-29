@@ -388,7 +388,7 @@ export default function Architect() {
   };
   return (
     <>
-      <Topbar />{" "}
+      <Topbar />
       <div style={{ padding: "20px" }}>
         <div
           style={{
@@ -473,7 +473,7 @@ export default function Architect() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {slicedData?.reverse().map((dealerData, index) => (
+                  {slicedData?.map((dealerData, index) => (
                     <StyledTableRow key={dealerData.id}>
                       <StyledTableCell>{index + 1}</StyledTableCell>
                       <StyledTableCell>{dealerData.name}</StyledTableCell>

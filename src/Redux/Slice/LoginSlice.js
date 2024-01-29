@@ -1,12 +1,10 @@
-// authSlice.js
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiUrl } from "../apiConfig";
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials) => {
-    const res = await fetch(`${apiUrl}/api/admin`, {
+    const res = await fetch(`${apiUrl}/web-login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

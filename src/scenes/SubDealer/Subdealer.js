@@ -2,7 +2,6 @@ import * as React from "react";
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Edit";
 import MapIcon from "@mui/icons-material/Map";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,18 +21,12 @@ import {
   DialogActions,
   TextField,
   Grid,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  FormHelperText,
 } from "@mui/material";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchViewAllDealer } from "../../Redux/Slice/AllDealer/ViewAllDealerSlice";
-import { addAllDealer } from "../../Redux/Slice/AllDealer/AddAllDealerSlice";
 import { updateAllDealer } from "../../Redux/Slice/AllDealer/UpdateAllDealerSlice";
 import InputBase from "@mui/material/InputBase";
 import L from "leaflet";
@@ -58,7 +51,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function Others() {
+export default function Subdealer() {
   const dispatch = useDispatch();
   const Alldealer = useSelector(
     (state) => state.ViewAllDealer.ViewAllDealerData
@@ -90,57 +83,10 @@ export default function Others() {
     setPage(0);
   };
 
-  // add Others
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-  const [formData, setFormData] = useState({
-    name: "",
-    address: "",
-    geotag_address: "Enter From Phone only",
-    concered_name: "",
-    number: "",
-    email: "",
-    designation: "",
-    role_id: "10",
-    longitude: "",
-    Attitude: "",
-    territory: "00",
-    state: "00",
-    rm: "00",
-    code: "00",
-    brands: "00",
-    other_category: "",
-  });
-  const validateForm = () => {
-    const errors = {};
-    if (!formData.other_category.trim()) {
-      errors.other_category = "Type is required";
-    }
-    if (!formData.name.trim()) {
-      errors.name = "Name is required";
-    }
-    if (!formData.address.trim()) {
-      errors.address = "Address is required";
-    }
-    if (!formData.concered_name.trim()) {
-      errors.concered_name = "Concerned Name is required";
-    }
-    if (!formData.number.trim()) {
-      errors.number = "Phone Number is required";
-    }
-    if (!formData.email.trim()) {
-      errors.email = "Email is required";
-    }
-    if (!formData.designation.trim()) {
-      errors.designation = "Designation is required";
-    }
 
-    return errors;
-  };
   const [formErrors, setFormErrors] = useState({
     name: "",
     address: "",
@@ -149,68 +95,8 @@ export default function Others() {
     number: "",
     email: "",
     designation: "",
-    other_category: "",
+    code: "",
   });
-  const handleForm = () => {
-    const errors = validateForm();
-
-    if (Object.keys(errors).length > 0) {
-      // Set errors and prevent form submission
-      setFormErrors(errors);
-      return;
-    }
-
-    // Include default values for fields in the formData
-    const formDataWithDefaults = {
-      ...formData,
-      role_id: "10",
-      longitude: "",
-      Attitude: "",
-      territory: "00",
-      state: "00",
-      rm: "00",
-      code: "00",
-      brands: "00",
-      geotag_address: "Enter From Phone only",
-    };
-
-    // Log the form data before dispatching
-    console.log("Form Data:", formDataWithDefaults);
-
-    dispatch(addAllDealer(formDataWithDefaults))
-      .then(() => {
-        // Reset form data and errors after successful addition
-        setFormData({
-          name: "",
-          address: "",
-          concered_name: "",
-          number: "",
-          email: "",
-          designation: "",
-          other_category: "",
-        });
-        setFormErrors({});
-
-        // Reload data after successful addition
-        dispatch(fetchViewAllDealer());
-        toast.success("Others added successfully!");
-
-        // Close the modal
-        handleCloseModal();
-      })
-      .catch((error) => {
-        console.error("Error adding Others:", error);
-        toast.error("Error adding Others. Please try again.");
-      });
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
 
   //   update
   const handleCloseEditModal = () => {
@@ -226,16 +112,15 @@ export default function Others() {
     number: "",
     email: "",
     designation: "",
-    role_id: "10",
+    role_id: "4",
     longitude: "",
     Attitude: "",
     territory: "00",
     state: "00",
     rm: "00",
-    code: "00",
+    code: "",
     brands: "00",
     geotag_address: "Enter From Phone only",
-    other_category: "",
   });
 
   const handleEditModalChange = (field, value) => {
@@ -253,16 +138,9 @@ export default function Others() {
       number,
       email,
       designation,
-      other_category,
-      //   role_id,
-      //   longitude,
-      //   Attitude,
-      //   territory,
-      //   state,
-      //   rm,
-      //   code,
-      //   brands,
-      //   geotag_address,
+      code,
+      longitude,
+      Attitude,
     } = editData;
 
     const credentials = {
@@ -273,14 +151,13 @@ export default function Others() {
       number,
       email,
       designation,
-      other_category,
-      role_id: "10",
-      longitude: "",
-      Attitude: "",
+      role_id: "4",
+      longitude,
+      Attitude,
       territory: "00",
       state: "00",
       rm: "00",
-      code: "00",
+      code,
       brands: "00",
       geotag_address: "Enter From Phone only",
       // include other default values as needed
@@ -290,14 +167,14 @@ export default function Others() {
       .then(() => {
         // Reload data after successful update
         dispatch(fetchViewAllDealer());
-        toast.success("Others updated successfully!");
+        toast.success("SubDealer updated successfully!");
 
         // Close the edit modal
         handleCloseEditModal();
       })
       .catch((error) => {
-        console.error("Error updating Others:", error);
-        toast.error("Error updating Others. Please try again.");
+        console.error("Error updating SubDealer:", error);
+        toast.error("Error updating SubDealer. Please try again.");
       });
   };
 
@@ -321,7 +198,6 @@ export default function Others() {
         code: dealerData.code,
         brands: dealerData.brands,
         geotag_address: dealerData.geotag_address,
-        other_category: dealerData.other_category,
       });
     } else {
       setEditData({
@@ -332,16 +208,15 @@ export default function Others() {
         number: "",
         email: "",
         designation: "",
-        role_id: "10",
+        role_id: "4",
         longitude: "",
         Attitude: "",
         territory: "00",
         state: "00",
         rm: "00",
-        code: "00",
+        code: "",
         brands: "00",
         geotag_address: "Enter From Phone only",
-        other_category: "",
       });
     }
     setOpenEditModal(true);
@@ -364,7 +239,7 @@ export default function Others() {
 
   // Filter the data further based on role_id
   const filteredDataWithRole = filteredData?.filter(
-    (dealerData) => dealerData.roleId === "10"
+    (dealerData) => dealerData.roleId === "4"
   );
 
   // Slice the data for pagination
@@ -385,7 +260,9 @@ export default function Others() {
     // Check if latitude and longitude are available
     if (isNaN(latitude) || isNaN(longitude)) {
       // Handle the case where latitude and/or longitude are not available
-      toast.error("Latitude and/or Longitude not available for this Others.");
+      toast.error(
+        "Latitude and/or Longitude not available for this SubDealer."
+      );
       return;
     }
 
@@ -417,16 +294,7 @@ export default function Others() {
             paddingRight: "10px",
           }}
         >
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ backgroundColor: "#fff" }}
-            startIcon={<AddIcon />}
-            onClick={handleOpenModal}
-          >
-            Add Others
-          </Button>
-          <h4 style={{ color: "#ffffff" }}>Others Details</h4>
+          <h4 style={{ color: "#ffffff" }}>SubDealer Details</h4>
           <InputBase
             sx={{ ml: 2 }}
             placeholder="Search by name or email"
@@ -536,150 +404,9 @@ export default function Others() {
         ) : (
           <div style={{ padding: "20px" }}>No User available</div>
         )}
-        <Dialog open={openModal} onClose={handleCloseModal}>
-          <DialogTitle>Add Others</DialogTitle>
-          <DialogContent>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <h5>Type</h5>
-                <FormControl fullWidth margin="normal">
-                  <InputLabel htmlFor="role_id">Type</InputLabel>
-                  <Select
-                    label="other_category"
-                    name="other_category"
-                    id="other_category"
-                    value={formData.other_category}
-                    onChange={handleChange}
-                    error={!!formErrors.other_category}
-                  >
-                    <MenuItem value="Plumber">Plumber</MenuItem>
-                    <MenuItem value="Company">Service</MenuItem>
-                    <MenuItem value="Others">Others</MenuItem>
-                  </Select>
-                  {formErrors.type && (
-                    <FormHelperText error>
-                      {formErrors.other_category}
-                    </FormHelperText>
-                  )}
-                </FormControl>
-              </Grid>
 
-              {formData.other_category === "Others" && (
-                <Grid item xs={12}>
-                  <h5>Other Category</h5>
-                  <TextField
-                    label="Other Category"
-                    fullWidth
-                    margin="normal"
-                    name="other_category"
-                    id="other_category"
-                    defaultValue={formData.other_category}
-                    onChange={handleChange}
-                    error={!!formErrors.other_category}
-                    helperText={formErrors.other_category}
-                  />
-                </Grid>
-              )}
-
-              <Grid item xs={12}>
-                <h5>Name</h5>
-                <TextField
-                  label="Name"
-                  fullWidth
-                  margin="normal"
-                  name="name"
-                  id="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  error={!!formErrors.name}
-                  helperText={formErrors.name}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <h5>Address</h5>
-                <TextField
-                  label="Address"
-                  fullWidth
-                  multiline
-                  rows={4} // Adjust the number of rows as needed
-                  margin="normal"
-                  name="address"
-                  id="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  error={!!formErrors.address}
-                  helperText={formErrors.address}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <h5>Concerned Name</h5>
-                <TextField
-                  label="Concerned Name"
-                  fullWidth
-                  margin="normal"
-                  name="concered_name"
-                  id="concered_name"
-                  value={formData.concered_name}
-                  onChange={handleChange}
-                  error={!!formErrors.concered_name}
-                  helperText={formErrors.concered_name}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <h5>Phone</h5>
-                <TextField
-                  label="Phone"
-                  fullWidth
-                  margin="normal"
-                  name="number"
-                  id="number"
-                  value={formData.number}
-                  onChange={handleChange}
-                  error={!!formErrors.number}
-                  helperText={formErrors.number}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <h5>Email</h5>
-                <TextField
-                  label="Email"
-                  fullWidth
-                  margin="normal"
-                  name="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  error={!!formErrors.email}
-                  helperText={formErrors.email}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <h5>Designation</h5>
-                <TextField
-                  label="Designation"
-                  fullWidth
-                  margin="normal"
-                  name="designation"
-                  id="designation"
-                  value={formData.designation}
-                  onChange={handleChange}
-                  error={!!formErrors.designation}
-                  helperText={formErrors.designation}
-                />
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseModal} color="secondary">
-              Cancel
-            </Button>
-            <Button color="primary" variant="contained" onClick={handleForm}>
-              Add
-            </Button>
-          </DialogActions>
-        </Dialog>
         <Dialog open={openEditModal} onClose={handleCloseModal}>
-          <DialogTitle>Update Others</DialogTitle>
+          <DialogTitle>Update SubDealer</DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
               <input
@@ -692,14 +419,9 @@ export default function Others() {
                 <TextField
                   id="name"
                   label="name"
-                  defaultValue={selectedData ? selectedData.name : ""}
-                  onChange={(e) =>
-                    handleEditModalChange("name", e.target.value)
-                  }
+                  value={selectedData ? selectedData.name : ""}
                   fullWidth
                   margin="normal"
-                  error={!!formErrors.name}
-                  helperText={formErrors.name}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -734,6 +456,17 @@ export default function Others() {
                   }
                   error={!!formErrors.number}
                   helperText={formErrors.number}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <h5>Code</h5>
+                <TextField
+                  label="Code"
+                  fullWidth
+                  margin="normal"
+                  name="code"
+                  id="code"
+                  value={selectedData ? selectedData.code : ""}
                 />
               </Grid>
               <Grid item xs={12}>
