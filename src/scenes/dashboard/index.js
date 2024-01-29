@@ -8,6 +8,9 @@ import {
   Grid,
 } from "@mui/material";
 import Topbar from "../global/Topbar";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchViewAllDealer } from "../../Redux/Slice/AllDealer/ViewAllDealerSlice";
+import { fetchViewPjp } from "../../Redux/Slice/Pjp/ViewPjpSlice";
 import {
   BarChart,
   Bar,
@@ -16,62 +19,73 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-const dataForCard1 = [
-  { month: "Jan", value: 30 },
-  { month: "Feb", value: 45 },
-  { month: "Mar", value: 21 },
-  { month: "Apr", value: 30 },
-  { month: "May", value: 55 },
-  { month: "Jun", value: 21 },
-  { month: "Jul", value: 0 },
-  { month: "Aug", value: 0 },
-  { month: "Sep", value: 0 },
-  { month: "Oct", value: 0 },
-  { month: "Nov", value: 0 },
-  { month: "Dec", value: 0 },
-];
-
-const dataForCard2 = [
-  { month: "Jan", value: 30 },
-  { month: "Feb", value: 145 },
-  { month: "Mar", value: 21 },
-  { month: "Apr", value: 5 },
-  { month: "May", value: 55 },
-  { month: "Jun", value: 21 },
-  { month: "Jul", value: 0 },
-  { month: "Aug", value: 0 },
-  { month: "Sep", value: 0 },
-  { month: "Oct", value: 0 },
-  { month: "Nov", value: 0 },
-  { month: "Dec", value: 0 },
-];
-
-const dataForCard3 = [
-  { month: "Jan", value: 30 },
-  { month: "Feb", value: 45 },
-  { month: "Mar", value: 21 },
-  { month: "Apr", value: 30 },
-  { month: "May", value: 75 },
-  { month: "Jun", value: 10 },
-  { month: "Jul", value: 0 },
-  { month: "Aug", value: 0 },
-  { month: "Sep", value: 0 },
-  { month: "Oct", value: 0 },
-  { month: "Nov", value: 0 },
-  { month: "Dec", value: 0 },
-];
-
-const generateRandomColor = () =>
-  `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+import { fetchViewDashboard } from "../../Redux/Slice/Dashboard/ViewDashboardSlice";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const Alldealer = useSelector(
+    (state) => state.ViewAllDealer.ViewAllDealerData
+  );
+  const DashboardData = useSelector(
+    (state) => state.ViewDashboard.ViewDashboardData
+  );
+
+  const AllPjp = useSelector((state) => state.ViewPjp.ViewPjpData);
+
+  const countDealersByRole = (roleName) => {
+    if (!Alldealer || !Alldealer.data || !Array.isArray(Alldealer.data)) {
+      return 0;
+    }
+
+    return Alldealer.data.filter((dealer) => dealer.rolesname === roleName)
+      .length;
+  };
+
+  const countAllPjp = () => {
+    if (!AllPjp || !AllPjp.data || typeof AllPjp.data !== "object") {
+      return 0;
+    }
+
+    return Object.keys(AllPjp.data).length;
+  };
+
+  React.useEffect(() => {
+    dispatch(fetchViewAllDealer());
+    dispatch(fetchViewPjp());
+    dispatch(fetchViewDashboard());
+  }, [dispatch]);
+  const prepareGraphData = () => {
+    if (!DashboardData || typeof DashboardData !== "object") {
+      return [];
+    }
+
+    const graphData = Object.keys(DashboardData).map((month) => ({
+      month,
+      value: DashboardData[month],
+    }));
+
+    return graphData;
+  };
+  const calculateTotalVisits = () => {
+    if (!DashboardData || typeof DashboardData !== "object") {
+      return 0;
+    }
+
+    return Object.values(DashboardData).reduce(
+      (total, visits) => total + visits,
+      0
+    );
+  };
+  const totalVisits = calculateTotalVisits();
+
+  const graphData = prepareGraphData();
   return (
-    <div>
+    <div style={{ background: "linear-gradient(to right, #ffedff, #fff)" }}>
       <Topbar />
       <Grid container spacing={3} style={{ padding: "30px" }}>
         <Grid item xs={3}>
-          <Card style={{ backgroundColor: generateRandomColor() }}>
+          <Card style={{ backgroundColor: "#f8ee1f" }}>
             <CardContent style={{ display: "flex", flexDirection: "column" }}>
               <div
                 style={{
@@ -81,28 +95,24 @@ const Dashboard = () => {
                 }}
               >
                 <Typography variant="h5" component="div">
-                  PJP
+                  Pjp
                 </Typography>
                 <Typography variant="h2" component="div">
-                  51
+                  {countAllPjp()}
                 </Typography>
               </div>
-              <ResponsiveContainer height={100}>
-                <BarChart data={dataForCard1}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer>
             </CardContent>
             <CardActions>
-              <Button size="small">Learn More</Button>
+              <Link to="/viewpjp">
+                <Button size="small" style={{ color: "#575757" }}>
+                  Learn More
+                </Button>
+              </Link>
             </CardActions>
           </Card>
         </Grid>
         <Grid item xs={3}>
-          <Card style={{ backgroundColor: generateRandomColor() }}>
+          <Card style={{ backgroundColor: "#e739fc" }}>
             <CardContent style={{ display: "flex", flexDirection: "column" }}>
               <div
                 style={{
@@ -115,25 +125,21 @@ const Dashboard = () => {
                   Dealer
                 </Typography>
                 <Typography variant="h2" component="div">
-                  51
+                  {countDealersByRole("Dealer")}
                 </Typography>
               </div>
-              <ResponsiveContainer height={100}>
-                <BarChart data={dataForCard1}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer>
             </CardContent>
             <CardActions>
-              <Button size="small">Learn More</Button>
+              <Link to="/dealer">
+                <Button size="small" style={{ color: "#575757" }}>
+                  Learn More
+                </Button>
+              </Link>
             </CardActions>
           </Card>
         </Grid>
         <Grid item xs={3}>
-          <Card style={{ backgroundColor: generateRandomColor() }}>
+          <Card style={{ backgroundColor: "#95fba0" }}>
             <CardContent style={{ display: "flex", flexDirection: "column" }}>
               <div
                 style={{
@@ -146,25 +152,21 @@ const Dashboard = () => {
                   Subdealer
                 </Typography>
                 <Typography variant="h2" component="div">
-                  51
+                  {countDealersByRole("SubDealer")}
                 </Typography>
               </div>
-              <ResponsiveContainer height={100}>
-                <BarChart data={dataForCard1}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer>
             </CardContent>
             <CardActions>
-              <Button size="small">Learn More</Button>
+              <Link to="/subdealer">
+                <Button size="small" style={{ color: "#575757" }}>
+                  Learn More
+                </Button>
+              </Link>
             </CardActions>
           </Card>
         </Grid>
         <Grid item xs={3}>
-          <Card style={{ backgroundColor: generateRandomColor() }}>
+          <Card style={{ backgroundColor: "#f9bcff" }}>
             <CardContent style={{ display: "flex", flexDirection: "column" }}>
               <div
                 style={{
@@ -177,26 +179,21 @@ const Dashboard = () => {
                   Architect
                 </Typography>
                 <Typography variant="h2" component="div">
-                  51
+                  {countDealersByRole("Architect")}
                 </Typography>
               </div>
-              <ResponsiveContainer height={100}>
-                <BarChart data={dataForCard1}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer>
             </CardContent>
             <CardActions>
-              <Button size="small">Learn More</Button>
+              <Link to="/architect">
+                <Button size="small" style={{ color: "#575757" }}>
+                  Learn More
+                </Button>
+              </Link>
             </CardActions>
           </Card>
         </Grid>
-
         <Grid item xs={3}>
-          <Card style={{ backgroundColor: generateRandomColor() }}>
+          <Card style={{ backgroundColor: "#9fa3f2" }}>
             <CardContent style={{ display: "flex", flexDirection: "column" }}>
               <div
                 style={{
@@ -209,26 +206,21 @@ const Dashboard = () => {
                   Builder
                 </Typography>
                 <Typography variant="h2" component="div">
-                  51
+                  {countDealersByRole("Builder")}
                 </Typography>
               </div>
-              <ResponsiveContainer height={100}>
-                <BarChart data={dataForCard2}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#82ca9d" />
-                </BarChart>
-              </ResponsiveContainer>
             </CardContent>
             <CardActions>
-              <Button size="small">Learn More</Button>
+              <Link to="/builder">
+                <Button size="small" style={{ color: "#575757" }}>
+                  Learn More
+                </Button>
+              </Link>
             </CardActions>
           </Card>
         </Grid>
-
         <Grid item xs={3}>
-          <Card style={{ backgroundColor: generateRandomColor() }}>
+          <Card style={{ backgroundColor: "#bf62ff" }}>
             <CardContent style={{ display: "flex", flexDirection: "column" }}>
               <div
                 style={{
@@ -241,25 +233,21 @@ const Dashboard = () => {
                   Contractor
                 </Typography>
                 <Typography variant="h2" component="div">
-                  51
+                  {countDealersByRole("Contractor")}
                 </Typography>
               </div>
-              <ResponsiveContainer height={100}>
-                <BarChart data={dataForCard3}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#ffc658" />
-                </BarChart>
-              </ResponsiveContainer>
             </CardContent>
             <CardActions>
-              <Button size="small">Learn More</Button>
+              <Link to="/contractor">
+                <Button size="small" style={{ color: "#575757" }}>
+                  Learn More
+                </Button>
+              </Link>
             </CardActions>
           </Card>
         </Grid>
         <Grid item xs={3}>
-          <Card style={{ backgroundColor: generateRandomColor() }}>
+          <Card style={{ backgroundColor: "#f9ff59" }}>
             <CardContent style={{ display: "flex", flexDirection: "column" }}>
               <div
                 style={{
@@ -272,25 +260,21 @@ const Dashboard = () => {
                   Competitor
                 </Typography>
                 <Typography variant="h2" component="div">
-                  51
+                  {countDealersByRole("Competitor")}
                 </Typography>
               </div>
-              <ResponsiveContainer height={100}>
-                <BarChart data={dataForCard3}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#ffc658" />
-                </BarChart>
-              </ResponsiveContainer>
             </CardContent>
             <CardActions>
-              <Button size="small">Learn More</Button>
+              <Link to="/competitor">
+                <Button size="small" style={{ color: "#575757" }}>
+                  Learn More
+                </Button>
+              </Link>
             </CardActions>
           </Card>
         </Grid>
         <Grid item xs={3}>
-          <Card style={{ backgroundColor: generateRandomColor() }}>
+          <Card style={{ backgroundColor: "#fe8553" }}>
             <CardContent style={{ display: "flex", flexDirection: "column" }}>
               <div
                 style={{
@@ -303,24 +287,19 @@ const Dashboard = () => {
                   Other
                 </Typography>
                 <Typography variant="h2" component="div">
-                  67
+                  {countDealersByRole("Other")}
                 </Typography>
               </div>
-              <ResponsiveContainer height={100}>
-                <BarChart data={dataForCard3}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#ffc658" />
-                </BarChart>
-              </ResponsiveContainer>
             </CardContent>
             <CardActions>
-              <Button size="small">Learn More</Button>
+              <Link to="/others">
+                <Button size="small" style={{ color: "#575757" }}>
+                  Learn More
+                </Button>
+              </Link>
             </CardActions>
           </Card>
         </Grid>
-        {/* Total Visits BarChart */}
         <Grid item xs={12}>
           <Card
             style={{
@@ -341,11 +320,11 @@ const Dashboard = () => {
                   Total Visits
                 </Typography>
                 <Typography variant="h1" component="div">
-                  67
+                  {totalVisits}
                 </Typography>
               </div>
               <ResponsiveContainer height={400}>
-                <BarChart data={dataForCard1}>
+                <BarChart data={graphData}>
                   <XAxis dataKey="month" tick={{ fill: "#fff" }} />
                   <YAxis tick={{ fill: "#fff" }} />
                   <Tooltip
@@ -359,9 +338,11 @@ const Dashboard = () => {
               </ResponsiveContainer>
             </CardContent>
             <CardActions>
-              <Button size="small" style={{ color: "#fff" }}>
-                Learn More
-              </Button>
+              <Link to="/visits">
+                <Button size="small" style={{ color: "#fff" }}>
+                  Learn More
+                </Button>
+              </Link>
             </CardActions>
           </Card>
         </Grid>

@@ -1,15 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../Redux/Slice/LoginSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogin = async () => {
+    try {
+      const action = await dispatch(loginUser({ email, password }));
+
+      if (action.payload.error) {
+        setErrorMessage(action.payload.error.message || "Login failed");
+        return;
+      }
+
+      setErrorMessage("");
+
+      navigate("/");
+    } catch (error) {
+      console.error("Error during login:", error);
+      setErrorMessage("Incorrect User Id Or Password");
+    }
+  };
+
+  useEffect(() => {
+    const getStoredToken = () => {
+      const storedToken = localStorage.getItem("token");
+      console.log("Token from localStorage (on mount):", storedToken);
+    };
+
+    getStoredToken();
+  }, []);
   return (
     <div style={containerStyle}>
       <h1 style={{ color: "#fff" }}>Login</h1>
       <form style={formStyle}>
-        <input type="text" placeholder="Email" style={inputStyle} />
-
-        <button type="button" style={buttonStyle}>
-          Get OTP
+        <input
+          type="text"
+          placeholder="User ID"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={inputStyle}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={inputStyle}
+        />
+        <button type="button" onClick={handleLogin} style={buttonStyle}>
+          Login
         </button>
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       </form>
     </div>
   );
@@ -21,10 +69,9 @@ const containerStyle = {
   alignItems: "center",
   justifyContent: "center",
   height: "100vh",
-  background: "linear-gradient(to bottom right, #1f2a40, transparent)", // Gradient background
-
-  boxShadow: "0 0 10px rgba(0, 0, 0, 0.6)", // Optional: Add a box shadow for better visibility
-  color: "white", // Text color
+  background: "linear-gradient(to bottom right, #1f2a40, transparent)",
+  boxShadow: "0 0 10px rgba(0, 0, 0, 0.6)",
+  color: "white",
 };
 
 const formStyle = {

@@ -2,7 +2,9 @@ import React from "react";
 import { Box, IconButton } from "@mui/material";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
-
+import { logoutUser } from "../../Redux/Slice/LoginSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const Topbar = () => {
   const toggleFullScreen = () => {
     const doc = window.document;
@@ -30,7 +32,13 @@ const Topbar = () => {
       }
     }
   };
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
   return (
     <Box
       display="flex"
@@ -40,7 +48,6 @@ const Topbar = () => {
         background: "linear-gradient(to right, #4d0054, #fde1ff)",
       }}
     >
-      {/* SEARCH BAR */}
       <Box display="flex" borderRadius="3px">
         <IconButton type="button" sx={{ p: 1 }}></IconButton>
       </Box>
@@ -50,7 +57,7 @@ const Topbar = () => {
         <IconButton onClick={toggleFullScreen}>
           <FullscreenIcon />
         </IconButton>
-        <IconButton>
+        <IconButton onClick={handleLogout}>
           <ExitToAppOutlinedIcon />
         </IconButton>
       </Box>

@@ -123,7 +123,7 @@ const Sidebar = () => {
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
               title="Profile"
-              to="/"
+              to="/profile"
               icon={<AccountCircleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -144,14 +144,14 @@ const Sidebar = () => {
             />
             <Item
               title="Dealer"
-              to="/"
+              to="/dealer"
               icon={<AccessibilityNewOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Sub Dealer"
-              to="/"
+              to="/subdealer"
               icon={<BoyOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -188,17 +188,13 @@ const Sidebar = () => {
                 setSelected={setSelected}
               />
             </SubMenu>
-            <SubMenu
+            <Item
               title="Visits"
+              to="/visits"
               icon={<TransferWithinAStationOutlinedIcon />}
-            >
-              <SubMenuItem
-                title="Assign Role"
-                to="/assign_role"
-                selected={selected}
-                setSelected={setSelected}
-              />
-            </SubMenu>
+              selected={selected}
+              setSelected={setSelected}
+            />
           </Box>
         </Menu>
       </ProSidebar>

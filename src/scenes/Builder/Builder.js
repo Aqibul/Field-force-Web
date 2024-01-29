@@ -471,7 +471,7 @@ export default function Builder() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {slicedData?.reverse().map((dealerData, index) => (
+                  {slicedData?.map((dealerData, index) => (
                     <StyledTableRow key={dealerData.id}>
                       <StyledTableCell>{index + 1}</StyledTableCell>
                       <StyledTableCell>{dealerData.name}</StyledTableCell>

@@ -5,12 +5,12 @@ const getTokenFromLocalStorage = () => {
   return localStorage.getItem("token");
 };
 
-export const fetchViewPjp = createAsyncThunk(
-  "ViewPjp/fetchViewPjp",
+export const fetchViewDashboard = createAsyncThunk(
+  "ViewDashboard/fetchViewDashboard",
   async () => {
     const token = getTokenFromLocalStorage();
 
-    const res = await fetch(`${apiUrl}/sales/pjb-report`, {
+    const res = await fetch(`${apiUrl}/sales/pjb-report/dashboard`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -21,27 +21,27 @@ export const fetchViewPjp = createAsyncThunk(
   }
 );
 
-const ViewPjpSlice = createSlice({
-  name: "ViewPjp",
+const ViewDashboardSlice = createSlice({
+  name: "ViewDashboard",
   initialState: {
-    ViewPjpData: null,
+    ViewDashboardData: null,
     isLoader: false,
     isError: false,
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchViewPjp.pending, (state) => {
+    builder.addCase(fetchViewDashboard.pending, (state) => {
       state.isLoader = true;
     });
-    builder.addCase(fetchViewPjp.fulfilled, (state, action) => {
+    builder.addCase(fetchViewDashboard.fulfilled, (state, action) => {
       state.isLoader = false;
-      state.ViewPjpData = action.payload;
-      // console.log("ViewPjp data:", action.payload);
+      state.ViewDashboardData = action.payload;
+      //   console.log("Viewcattt data:", action.payload);
     });
-    builder.addCase(fetchViewPjp.rejected, (state) => {
+    builder.addCase(fetchViewDashboard.rejected, (state) => {
       state.isLoader = false;
       state.isError = true;
     });
   },
 });
 
-export default ViewPjpSlice.reducer;
+export default ViewDashboardSlice.reducer;

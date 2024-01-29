@@ -1,39 +1,84 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchViewProfile } from "../../Redux/Slice/Profile/ViewProfileSlice";
 
-const EmployeeContainer = () => {
-  const employeeData = {
-    code: 213132,
-    name: "Aqibul Haque",
-    rm: "something",
-    role: "Admin",
-    state: "Assam",
-    territory: "Assam",
-  };
-  const containerStyle = {
-    background: "linear-gradient(to bottom right, #1f2a40, transparent)", // Gradient background
-    position: "absolute",
-    top: "50%",
-    left: "58%",
-    transform: "translate(-50%, -50%)",
-    width: "50%", // Set width to 50% of the viewport
-    height: "50%", // Set height to 50% of the viewport
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 0 10px rgba(0, 0, 0, 0.6)", // Optional: Add a box shadow for better visibility
-    color: "white", // Text color
-  };
+const Profile = () => {
+  const dispatch = useDispatch();
+  const ProfileData = useSelector((state) => state.ViewProfile.ViewProfileData);
+
+  React.useEffect(() => {
+    dispatch(fetchViewProfile());
+  }, [dispatch]);
+
+  // Check if ProfileData is null or undefined
+  if (!ProfileData) {
+    return (
+      <div style={mainContainerStyle}>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
+
+  // Check if ProfileData.data is null or undefined
+  if (!ProfileData.data) {
+    return (
+      <div style={mainContainerStyle}>
+        <h1>No data available</h1>
+      </div>
+    );
+  }
+
+  // Use an absolute URL for the image
+  const imageUrl =
+    "https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png";
 
   return (
-    <div style={containerStyle}>
-      <h1>PROFILE</h1>
-      <p>Code: {employeeData.code}</p>
-      <p>Name: {employeeData.name}</p>
-      <p>RM: {employeeData.rm}</p>
-      <p>Role: {employeeData.role}</p>
-      <p>State: {employeeData.state}</p>
-      <p>Territory: {employeeData.territory}</p>
+    <div style={mainContainerStyle}>
+      <div style={centerContainerStyle}>
+        <div style={leftContainerStyle}>
+          <h1>PROFILE</h1>
+          <img
+            src={imageUrl}
+            alt="Profile Image"
+            style={{ width: "70%", borderRadius: "8px" }}
+          />
+
+          <h1>{ProfileData.data.name}</h1>
+        </div>
+        <div style={rightContainerStyle}>
+          <h3>Code: {ProfileData.data.empCode}</h3>
+          <h3>RM: {ProfileData.data.rm}</h3>
+          <h3>State: {ProfileData.data.state}</h3>
+          <h3>Territory: {ProfileData.data.territory}</h3>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default EmployeeContainer;
+const mainContainerStyle = {
+  background: "linear-gradient(to right, #4d0054, #91009e)",
+  borderRadius: "8px",
+  boxShadow: "0 0 10px rgba(0, 0, 0, 0.6)",
+  color: "white",
+  margin: "170px",
+  padding: "50px",
+};
+
+const centerContainerStyle = {
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+};
+
+const leftContainerStyle = {
+  flex: 1,
+  marginRight: "20px",
+};
+
+const rightContainerStyle = {
+  flex: 2,
+};
+
+export default Profile;

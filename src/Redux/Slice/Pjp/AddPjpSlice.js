@@ -2,16 +2,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiUrl } from "../../apiConfig";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// const getTokenFromLocalStorage = () => {
-//   return localStorage.getItem("token");
-// };
+
+const getTokenFromLocalStorage = () => {
+  return localStorage.getItem("token");
+};
 
 // Async thunk for adding a company
 export const addPjp = createAsyncThunk("pjp/addPjp", async (formData) => {
   try {
-    // const token = getTokenFromLocalStorage();
+    const token = getTokenFromLocalStorage();
 
     const response = await axios.post(
       `${apiUrl}/sales/pjb-report/add`,
@@ -19,8 +20,7 @@ export const addPjp = createAsyncThunk("pjp/addPjp", async (formData) => {
       formData,
       {
         headers: {
-          Authorization:
-            "Bearer 32|LKWlxpo961loITF1XPqH6wqpBGEiBOz2xMDl0SrEdede90e9",
+          Authorization: `Bearer ${token}`,
         },
       }
     );
